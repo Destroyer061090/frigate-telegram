@@ -120,7 +120,8 @@ func ErrorSend(TextError string, bot *tgbotapi.BotAPI, EventID string) {
 	if err != nil {
 		log.Error.Println(err.Error())
 	}
-	log.Error.Fatalln(TextError)
+	//ABlog.Error.Fatalln(TextError)
+	log.Error.Println(TextError)
 }
 
 func WarnSend(TextError string, bot *tgbotapi.BotAPI, EventID string) {

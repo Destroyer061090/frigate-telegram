@@ -62,7 +62,7 @@ func ChatBot(bot *tgbotapi.BotAPI, conf *config.Config) {
 		}
 		if _, err := bot.Send(msg); err != nil {
 			//ABlog.Error.Fatalln("Error sending message: " + err.Error())
-			log.Error.Println("Error sending message: " + err.Error()")
+			log.Error.Println("Error sending message: " + err.Error())
 		}
 	}
 }

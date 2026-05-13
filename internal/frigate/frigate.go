@@ -120,7 +120,6 @@ func ErrorSend(TextError string, bot *tgbotapi.BotAPI, EventID string) {
 	if err != nil {
 		log.Error.Println(err.Error())
 	}
-	//ABlog.Error.Fatalln(TextError)
 	log.Error.Println(TextError)
 }
 
@@ -271,13 +270,15 @@ func DownloadThumbnail(EventID string, bot *tgbotapi.BotAPI) string {
 	}
 
 	// Verify file exists and has content
-	fileInfo, err := os.Stat(filename)
+	fileInfo, err := waitForFile(filename, 5, 200*time.Millisecond)
 	if err != nil {
-		ErrorSend("Error verifying thumbnail file: "+err.Error(), bot, EventID)
+	    log.Warn.Println("clip file not ready:", err)
+	    return ""
 	}
-
+	
 	if fileInfo.Size() == 0 {
-		ErrorSend("Thumbnail file is empty after download", bot, EventID)
+	    log.Warn.Println("clip file empty:", filename)
+	    return ""
 	}
 
 	log.Debug.Printf("Successfully downloaded thumbnail to %s (size: %d bytes)", filename, fileInfo.Size())

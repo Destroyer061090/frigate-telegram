@@ -11,7 +11,7 @@ import (
 
 var (
 	RedisKeyStateSendEvent string          = "FrigateTelegram_SendEvent"
-	RedisKeyStateMuteEvent string          = "FrigateTelegram_MuteEvent
+	RedisKeyStateMuteEvent string          = "FrigateTelegram_MuteEvent"
 	ctx                    context.Context = context.Background()
 	conf                   *config.Config  = config.New()
 )
@@ -30,7 +30,6 @@ func SetStateSendEvent(send bool) bool {
 	if send {
 		err := rdb.Set(ctx, RedisKeyStateSendEvent, 1, 0).Err()
 		if err != nil {
-			//ABlog.Error.Fatalln(err)
 			log.Error.Println(err)
 			return false
 		}
@@ -61,7 +60,7 @@ func SetStateMuteEvent(mute bool) bool {
 	if mute {
 		err := rdb.Set(ctx, RedisKeyStateMuteEvent, 1, 0).Err()
 		if err != nil {
-			log.Error.Fatalln(err)
+			log.Error.Println(err)
 			return false
 		}
 		return true
@@ -86,21 +85,21 @@ func GetStateMuteEvent() bool {
 func AddNewEvent(EventID string, State string, RedisTTL time.Duration) {
 	err := rdb.Set(ctx, EventID, State, RedisTTL).Err()
 	if err != nil {
-		log.Error.Fatalln(err)
+		log.Error.Println(err)
 	}
 }
 
 func CheckEvent(EventID string) bool {
 	event, err := rdb.Exists(ctx, EventID).Result()
 	if err != nil {
-		log.Error.Fatalln(err)
+		log.Error.Println(err)
 	}
 	if event == 0 {
 		return true
 	}
 	val, err := rdb.Get(ctx, EventID).Result()
 	if err != nil {
-		log.Error.Fatalln(err)
+		log.Error.Println(err)
 	}
 	if val == "InProgress" {
 		return true

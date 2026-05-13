@@ -394,15 +394,16 @@ func SaveClip(EventID string, bot *tgbotapi.BotAPI) string {
 	}
 
 	// Verify file exists and has content
-	fileInfo, err := os.Stat(filename)
+	fileInfo, err := waitForFile(filename, 5, 200*time.Millisecond)
 	if err != nil {
-		ErrorSend("Error verifying clip file: "+err.Error(), bot, EventID)
+	    log.Warn.Println("clip file not ready:", err)
+	    return ""
 	}
-
+	
 	if fileInfo.Size() == 0 {
-		ErrorSend("Clip file is empty after download", bot, EventID)
+	    log.Warn.Println("clip file empty:", filename)
+	    return ""
 	}
-
 	log.Debug.Printf("Successfully downloaded clip to %s (size: %d bytes)", filename, fileInfo.Size())
 	return filename
 }
@@ -580,7 +581,7 @@ func SendMessageEvent(FrigateEvent EventStruct, bot *tgbotapi.BotAPI) {
 		msg := tgbotapi.NewMessage(conf.TelegramChatID, "")
 		msg.Text = text
 		if _, err := bot.Send(msg); err != nil {
-			log.Error.Fatalln("Error sending message: " + err.Error())
+			log.Error.Println("Error sending message: " + err.Error())
 		}
 	}
 

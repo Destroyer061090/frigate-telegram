@@ -30,7 +30,8 @@ func SetStateSendEvent(send bool) bool {
 	if send {
 		err := rdb.Set(ctx, RedisKeyStateSendEvent, 1, 0).Err()
 		if err != nil {
-			log.Error.Fatalln(err)
+			//ABlog.Error.Fatalln(err)
+			log.Error.Println(err)
 			return false
 		}
 		return true
